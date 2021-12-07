@@ -1,0 +1,25 @@
+name: Build MATLAB Toolbox
+on:
+  push:
+    branches: [master]
+    tags: [v*]
+  pull_request:
+
+jobs:
+  build:
+    name: Build Toolbox - ${{ github.event_name }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout repository
+        uses: actions/checkout@v2
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+      - name: Build Toolbox
+        uses: matlab-actions/run-command@v1
+        with:
+            command: matlab.addons.toolbox.packageToolbox("test.prj")
+      - name: Upload toolbox
+        uses: actions/upload-artifact@v2
+        with:
+            name: The Toolbox
+            path: TestMatlabGHActions.mltbx
